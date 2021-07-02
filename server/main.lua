@@ -1,6 +1,3 @@
-QBCore = nil
-TriggerEvent('QBCore:GetObject', function(obj) QBCore = obj end)
-
 Citizen.CreateThread(function()
     while true do 
         Citizen.Wait(1000)
