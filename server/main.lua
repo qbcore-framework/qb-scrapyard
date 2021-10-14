@@ -14,7 +14,7 @@ end)
 
 
 QBCore.Functions.CreateCallback('qb-scrapyard:checkOwnerVehicle', function(source, cb, plate)
-    exports.oxmysql:execute("SELECT * FROM `player_vehicles` WHERE `plate` = '"..plate.."'",{}, function(result)
+    exports.oxmysql:execute("SELECT `plate` FROM `player_vehicles` WHERE `plate` = ?",{plate}, function(result)
         if result[1] ~= nil then
             cb(false)
         else 

@@ -42,7 +42,7 @@ Citizen.CreateThread(function()
 									if IsVehicleValid(GetEntityModel(vehicle)) then 
 										local vehiclePlate = GetVehicleNumberPlateText(vehicle) 
 										QBCore.Functions.TriggerCallback('qb-scrapyard:checkOwnerVehicle',function(retval)
-											if retval == true then 
+											if retval then 
 												ScrapVehicle(vehicle)
 											else
 												QBCore.Functions.Notify("You can't smash a vehicle that owns it.", "error")
