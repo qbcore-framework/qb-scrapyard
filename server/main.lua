@@ -14,13 +14,12 @@ end)
 
 
 QBCore.Functions.CreateCallback('qb-scrapyard:checkOwnerVehicle', function(source, cb, plate)
-    exports.oxmysql:execute("SELECT `plate` FROM `player_vehicles` WHERE `plate` = ?",{plate}, function(result)
-        if result[1] ~= nil then
-            cb(false)
-        else 
-            cb(true)
-        end
-    end)
+    local result = exports.oxmysql:scalarSync("SELECT `plate` FROM `player_vehicles` WHERE `plate` = ?",{plate})
+    if result then
+        cb(false)
+    else 
+        cb(true)
+    end
 end)
 
 
