@@ -2,8 +2,7 @@ local closestScrapyard = 0
 local emailSend = false
 local isBusy = false
 
-RegisterNetEvent("QBCore:Client:OnPlayerLoaded")
-AddEventHandler("QBCore:Client:OnPlayerLoaded", function()
+RegisterNetEvent("QBCore:Client:OnPlayerLoaded", function()
     TriggerServerEvent("qb-scrapyard:server:LoadVehicleList")
 end)
 
@@ -41,7 +40,14 @@ Citizen.CreateThread(function()
 							if IsControlJustReleased(0, 38) then
 								if GetPedInVehicleSeat(vehicle, -1) == PlayerPedId() then
 									if IsVehicleValid(GetEntityModel(vehicle)) then 
-										ScrapVehicle(vehicle)
+										local vehiclePlate = GetVehicleNumberPlateText(vehicle) 
+										QBCore.Functions.TriggerCallback('qb-scrapyard:checkOwnerVehicle',function(retval)
+											if retval then 
+												ScrapVehicle(vehicle)
+											else
+												QBCore.Functions.Notify("You can't smash a vehicle that owns it.", "error")
+											end
+										end,vehiclePlate)
 									else
 										QBCore.Functions.Notify("This Vehicle Cannot Be Scrapped.", "error")
 									end
@@ -65,8 +71,7 @@ Citizen.CreateThread(function()
 	end
 end)
 
-RegisterNetEvent('qb-scapyard:client:setNewVehicles')
-AddEventHandler('qb-scapyard:client:setNewVehicles', function(vehicleList)
+RegisterNetEvent('qb-scapyard:client:setNewVehicles', function(vehicleList)
 	Config.CurrentVehicles = vehicleList
 end)
 

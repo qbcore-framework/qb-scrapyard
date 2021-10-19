@@ -6,15 +6,24 @@ Citizen.CreateThread(function()
     end
 end)
 
-RegisterServerEvent('qb-scrapyard:server:LoadVehicleList')
-AddEventHandler('qb-scrapyard:server:LoadVehicleList', function()
+
+RegisterNetEvent('qb-scrapyard:server:LoadVehicleList', function()
     local src = source
     TriggerClientEvent("qb-scapyard:client:setNewVehicles", src, Config.CurrentVehicles)
 end)
 
 
-RegisterServerEvent('qb-scrapyard:server:ScrapVehicle')
-AddEventHandler('qb-scrapyard:server:ScrapVehicle', function(listKey)
+QBCore.Functions.CreateCallback('qb-scrapyard:checkOwnerVehicle', function(source, cb, plate)
+    local result = exports.oxmysql:scalarSync("SELECT `plate` FROM `player_vehicles` WHERE `plate` = ?",{plate})
+    if result then
+        cb(false)
+    else 
+        cb(true)
+    end
+end)
+
+
+RegisterNetEvent('qb-scrapyard:server:ScrapVehicle', function(listKey)
     local src = source 
     local Player = QBCore.Functions.GetPlayer(src)
     if Config.CurrentVehicles[listKey] ~= nil then 
