@@ -26,23 +26,23 @@ Citizen.CreateThread(function()
 end)
 
 Citizen.CreateThread(function()
-	while true do 
+	while true do
 		Citizen.Wait(1)
 		if closestScrapyard ~= 0 then
 			local pos = GetEntityCoords(PlayerPedId())
 			if #(pos - vector3(Config.Locations[closestScrapyard]["deliver"].x, Config.Locations[closestScrapyard]["deliver"].y, Config.Locations[closestScrapyard]["deliver"].z)) < 10.0 then
 				if IsPedInAnyVehicle(PlayerPedId()) then
 					local vehicle = GetVehiclePedIsIn(PlayerPedId(), true)
-					if vehicle ~= 0 and vehicle ~= nil then 
+					if vehicle ~= 0 and vehicle ~= nil then
 						local vehpos = GetEntityCoords(vehicle)
 						if #(pos - vector3(vehpos.x, vehpos.y, vehpos.z)) < 2.5 and not isBusy then
 							DrawText3Ds(vehpos.x, vehpos.y, vehpos.z, "~g~E~w~ - Disassemble Vehicle")
 							if IsControlJustReleased(0, 38) then
 								if GetPedInVehicleSeat(vehicle, -1) == PlayerPedId() then
-									if IsVehicleValid(GetEntityModel(vehicle)) then 
-										local vehiclePlate = GetVehicleNumberPlateText(vehicle) 
+									if IsVehicleValid(GetEntityModel(vehicle)) then
+										local vehiclePlate = QBCore.Functions.GetPlate(vehicle)
 										QBCore.Functions.TriggerCallback('qb-scrapyard:checkOwnerVehicle',function(retval)
-											if retval then 
+											if retval then
 												ScrapVehicle(vehicle)
 											else
 												QBCore.Functions.Notify("You can't smash a vehicle that owns it.", "error")
@@ -76,13 +76,13 @@ RegisterNetEvent('qb-scapyard:client:setNewVehicles', function(vehicleList)
 end)
 
 function CreateListEmail()
-	if Config.CurrentVehicles ~= nil and next(Config.CurrentVehicles) ~= nil then 
+	if Config.CurrentVehicles ~= nil and next(Config.CurrentVehicles) ~= nil then
 		emailSend = true
 		local vehicleList = ""
 		for k, v in pairs(Config.CurrentVehicles) do
-			if Config.CurrentVehicles[k] ~= nil then 
+			if Config.CurrentVehicles[k] ~= nil then
 				local vehicleInfo = QBCore.Shared.Vehicles[v]
-				if vehicleInfo ~= nil then 
+				if vehicleInfo ~= nil then
 					vehicleList = vehicleList  .. vehicleInfo["brand"] .. " " .. vehicleInfo["name"] .. "<br />"
 				end
 			end
@@ -125,9 +125,9 @@ end
 
 function IsVehicleValid(vehicleModel)
 	local retval = false
-	if Config.CurrentVehicles ~= nil and next(Config.CurrentVehicles) ~= nil then 
+	if Config.CurrentVehicles ~= nil and next(Config.CurrentVehicles) ~= nil then
 		for k, v in pairs(Config.CurrentVehicles) do
-			if Config.CurrentVehicles[k] ~= nil and GetHashKey(Config.CurrentVehicles[k]) == vehicleModel then 
+			if Config.CurrentVehicles[k] ~= nil and GetHashKey(Config.CurrentVehicles[k]) == vehicleModel then
 				retval = true
 			end
 		end
@@ -137,9 +137,9 @@ end
 
 function GetVehicleKey(vehicleModel)
 	local retval = 0
-	if Config.CurrentVehicles ~= nil and next(Config.CurrentVehicles) ~= nil then 
+	if Config.CurrentVehicles ~= nil and next(Config.CurrentVehicles) ~= nil then
 		for k, v in pairs(Config.CurrentVehicles) do
-			if GetHashKey(Config.CurrentVehicles[k]) == vehicleModel then 
+			if GetHashKey(Config.CurrentVehicles[k]) == vehicleModel then
 				retval = k
 			end
 		end
