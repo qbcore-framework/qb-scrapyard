@@ -1,3 +1,4 @@
+local QBCore = exports['qb-core']:GetCoreObject()
 local closestScrapyard = 0
 local emailSend = false
 local isBusy = false

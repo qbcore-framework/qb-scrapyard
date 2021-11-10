@@ -1,5 +1,7 @@
+local QBCore = exports['qb-core']:GetCoreObject()
+
 Citizen.CreateThread(function()
-    while true do 
+    while true do
         Citizen.Wait(1000)
         GenerateVehicleList()
         Citizen.Wait((1000 * 60) * 60)
@@ -17,16 +19,16 @@ QBCore.Functions.CreateCallback('qb-scrapyard:checkOwnerVehicle', function(sourc
     local result = exports.oxmysql:scalarSync("SELECT `plate` FROM `player_vehicles` WHERE `plate` = ?",{plate})
     if result then
         cb(false)
-    else 
+    else
         cb(true)
     end
 end)
 
 
 RegisterNetEvent('qb-scrapyard:server:ScrapVehicle', function(listKey)
-    local src = source 
+    local src = source
     local Player = QBCore.Functions.GetPlayer(src)
-    if Config.CurrentVehicles[listKey] ~= nil then 
+    if Config.CurrentVehicles[listKey] ~= nil then
         for i = 1, math.random(2, 4), 1 do
             local item = Config.Items[math.random(1, #Config.Items)]
             Player.Functions.AddItem(item, math.random(25, 45))
@@ -59,9 +61,9 @@ end
 
 function IsInList(name)
     local retval = false
-    if Config.CurrentVehicles ~= nil and next(Config.CurrentVehicles) ~= nil then 
+    if Config.CurrentVehicles ~= nil and next(Config.CurrentVehicles) ~= nil then
         for k, v in pairs(Config.CurrentVehicles) do
-            if Config.CurrentVehicles[k] == name then 
+            if Config.CurrentVehicles[k] == name then
                 retval = true
             end
         end
