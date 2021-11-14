@@ -7,7 +7,7 @@ RegisterNetEvent("QBCore:Client:OnPlayerLoaded", function()
     TriggerServerEvent("qb-scrapyard:server:LoadVehicleList")
 end)
 
-Citizen.CreateThread(function()
+CreateThread(function()
 	for id, scrapyard in pairs(Config.Locations) do
 		local blip = AddBlipForCoord(Config.Locations[id]["main"].x, Config.Locations[id]["main"].y, Config.Locations[id]["main"].z)
         SetBlipSprite(blip, 380)
@@ -19,16 +19,16 @@ Citizen.CreateThread(function()
         AddTextComponentSubstringPlayerName("Scrap Yard")
         EndTextCommandSetBlipName(blip)
 	end
-    Citizen.Wait(1000)
+    Wait(1000)
     while true do
         SetClosestScrapyard()
-        Citizen.Wait(10000)
+        Wait(10000)
     end
 end)
 
-Citizen.CreateThread(function()
+CreateThread(function()
 	while true do
-		Citizen.Wait(1)
+		Wait(1)
 		if closestScrapyard ~= 0 then
 			local pos = GetEntityCoords(PlayerPedId())
 			if #(pos - vector3(Config.Locations[closestScrapyard]["deliver"].x, Config.Locations[closestScrapyard]["deliver"].y, Config.Locations[closestScrapyard]["deliver"].z)) < 10.0 then
@@ -171,10 +171,10 @@ function ScrapVehicleAnim(time)
     loadAnimDict("mp_car_bomb")
     TaskPlayAnim(PlayerPedId(), "mp_car_bomb", "car_bomb_mechanic" ,3.0, 3.0, -1, 16, 0, false, false, false)
     openingDoor = true
-    Citizen.CreateThread(function()
+    CreateThread(function()
         while openingDoor do
             TaskPlayAnim(PlayerPedId(), "mp_car_bomb", "car_bomb_mechanic", 3.0, 3.0, -1, 16, 0, 0, 0, 0)
-            Citizen.Wait(2000)
+            Wait(2000)
 			time = time - 2
             if time <= 0 then
                 openingDoor = false
@@ -187,7 +187,7 @@ end
 function loadAnimDict(dict)
     while (not HasAnimDictLoaded(dict)) do
         RequestAnimDict(dict)
-        Citizen.Wait(5)
+        Wait(5)
     end
 end
 
@@ -205,4 +205,3 @@ function DrawText3Ds(x, y, z, text)
     DrawRect(0.0, 0.0+0.0125, 0.017+ factor, 0.03, 0, 0, 0, 75)
     ClearDrawOrigin()
 end
-
