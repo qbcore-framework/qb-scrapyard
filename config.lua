@@ -18,6 +18,14 @@ Config.Items = {
     "glass",
 }
 
+Config.RareItems = {
+    "armor",
+    "cryptostick",
+    "pistol_ammo",
+    "smg_ammo",
+    "thermite",
+}
+
 Config.CurrentVehicles = {}
 
 Config.Vehicles = {
