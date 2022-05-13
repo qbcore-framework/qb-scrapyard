@@ -14,7 +14,7 @@ RegisterNetEvent('qb-scrapyard:server:LoadVehicleList', function()
 end)
 
 
-QBCore.Functions.CreateCallback('qb-scrapyard:checkOwnerVehicle', function(source, cb, plate)
+QBCore.Functions.CreateCallback('qb-scrapyard:checkOwnerVehicle', function(_, cb, plate)
     local result = MySQL.Sync.fetchScalar("SELECT `plate` FROM `player_vehicles` WHERE `plate` = ?",{plate})
     if result then
         cb(false)
@@ -28,7 +28,7 @@ RegisterNetEvent('qb-scrapyard:server:ScrapVehicle', function(listKey)
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
     if Config.CurrentVehicles[listKey] ~= nil then
-        for i = 1, math.random(2, 4), 1 do
+        for _ = 1, math.random(2, 4), 1 do
             local item = Config.Items[math.random(1, #Config.Items)]
             Player.Functions.AddItem(item, math.random(25, 45))
             TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items[item], 'add')
@@ -61,7 +61,7 @@ end
 function IsInList(name)
     local retval = false
     if Config.CurrentVehicles ~= nil and next(Config.CurrentVehicles) ~= nil then
-        for k, v in pairs(Config.CurrentVehicles) do
+        for k, _ in pairs(Config.CurrentVehicles) do
             if Config.CurrentVehicles[k] == name then
                 retval = true
             end
