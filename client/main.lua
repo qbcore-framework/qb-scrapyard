@@ -152,7 +152,7 @@ function SetClosestScrapyard()
 	local pos = GetEntityCoords(PlayerPedId(), true)
     local current = nil
     local dist = nil
-	for id, _ in pairs(Config.Locations) do
+	for id in pairs(Config.Locations) do
 		if current ~= nil then
 			if #(pos - vector3(Config.Locations[id]["main"].x, Config.Locations[id]["main"].y, Config.Locations[id]["main"].z)) < dist then
 				current = id
