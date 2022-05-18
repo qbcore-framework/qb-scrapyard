@@ -8,7 +8,7 @@ RegisterNetEvent("QBCore:Client:OnPlayerLoaded", function()
 end)
 
 CreateThread(function()
-	for id, scrapyard in pairs(Config.Locations) do
+	for id in pairs(Config.Locations) do
 		local blip = AddBlipForCoord(Config.Locations[id]["main"].x, Config.Locations[id]["main"].y, Config.Locations[id]["main"].z)
         SetBlipSprite(blip, 380)
         SetBlipDisplay(blip, 4)
@@ -127,7 +127,7 @@ end
 function IsVehicleValid(vehicleModel)
 	local retval = false
 	if Config.CurrentVehicles ~= nil and next(Config.CurrentVehicles) ~= nil then
-		for k, v in pairs(Config.CurrentVehicles) do
+		for k in pairs(Config.CurrentVehicles) do
 			if Config.CurrentVehicles[k] ~= nil and GetHashKey(Config.CurrentVehicles[k]) == vehicleModel then
 				retval = true
 			end
@@ -139,7 +139,7 @@ end
 function GetVehicleKey(vehicleModel)
 	local retval = 0
 	if Config.CurrentVehicles ~= nil and next(Config.CurrentVehicles) ~= nil then
-		for k, v in pairs(Config.CurrentVehicles) do
+		for k in pairs(Config.CurrentVehicles) do
 			if GetHashKey(Config.CurrentVehicles[k]) == vehicleModel then
 				retval = k
 			end
@@ -152,7 +152,7 @@ function SetClosestScrapyard()
 	local pos = GetEntityCoords(PlayerPedId(), true)
     local current = nil
     local dist = nil
-	for id, scrapyard in pairs(Config.Locations) do
+	for id in pairs(Config.Locations) do
 		if current ~= nil then
 			if #(pos - vector3(Config.Locations[id]["main"].x, Config.Locations[id]["main"].y, Config.Locations[id]["main"].z)) < dist then
 				current = id
@@ -170,7 +170,7 @@ function ScrapVehicleAnim(time)
     time = (time / 1000)
     loadAnimDict("mp_car_bomb")
     TaskPlayAnim(PlayerPedId(), "mp_car_bomb", "car_bomb_mechanic" ,3.0, 3.0, -1, 16, 0, false, false, false)
-    openingDoor = true
+    local openingDoor = true
     CreateThread(function()
         while openingDoor do
             TaskPlayAnim(PlayerPedId(), "mp_car_bomb", "car_bomb_mechanic", 3.0, 3.0, -1, 16, 0, 0, 0, 0)
