@@ -61,7 +61,7 @@ end
 function IsInList(name)
     local retval = false
     if Config.CurrentVehicles ~= nil and next(Config.CurrentVehicles) ~= nil then
-        for k, _ in pairs(Config.CurrentVehicles) do
+        for k in pairs(Config.CurrentVehicles) do
             if Config.CurrentVehicles[k] == name then
                 retval = true
             end
