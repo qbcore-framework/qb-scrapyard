@@ -8,7 +8,7 @@ RegisterNetEvent("QBCore:Client:OnPlayerLoaded", function()
 end)
 
 CreateThread(function()
-	for id, _ in pairs(Config.Locations) do
+	for id in pairs(Config.Locations) do
 		local blip = AddBlipForCoord(Config.Locations[id]["main"].x, Config.Locations[id]["main"].y, Config.Locations[id]["main"].z)
         SetBlipSprite(blip, 380)
         SetBlipDisplay(blip, 4)
