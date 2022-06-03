@@ -31,41 +31,100 @@ CreateThread(function()
 		Wait(1)
 		if closestScrapyard ~= 0 then
 			local pos = GetEntityCoords(PlayerPedId())
-			if #(pos - vector3(Config.Locations[closestScrapyard]["deliver"].x, Config.Locations[closestScrapyard]["deliver"].y, Config.Locations[closestScrapyard]["deliver"].z)) < 10.0 then
-				if IsPedInAnyVehicle(PlayerPedId()) then
-					local vehicle = GetVehiclePedIsIn(PlayerPedId(), true)
-					if vehicle ~= 0 and vehicle ~= nil then
-						local vehpos = GetEntityCoords(vehicle)
-						if #(pos - vector3(vehpos.x, vehpos.y, vehpos.z)) < 2.5 and not isBusy then
-							DrawText3Ds(vehpos.x, vehpos.y, vehpos.z, Lang:t('text.disassemble_vehicle'))
-							if IsControlJustReleased(0, 38) then
-								if GetPedInVehicleSeat(vehicle, -1) == PlayerPedId() then
-									if IsVehicleValid(GetEntityModel(vehicle)) then
-										local vehiclePlate = QBCore.Functions.GetPlate(vehicle)
-										QBCore.Functions.TriggerCallback('qb-scrapyard:checkOwnerVehicle',function(retval)
-											if retval then
-												ScrapVehicle(vehicle)
-											else
-												QBCore.Functions.Notify(Lang:t('error.smash_own'), "error")
-											end
-										end,vehiclePlate)
+			if not Config.UseTarget then
+				if #(pos - vector3(Config.Locations[closestScrapyard]["deliver"].x, Config.Locations[closestScrapyard]["deliver"].y, Config.Locations[closestScrapyard]["deliver"].z)) < 10.0 then
+					if IsPedInAnyVehicle(PlayerPedId()) then
+						local vehicle = GetVehiclePedIsIn(PlayerPedId(), true)
+						if vehicle ~= 0 and vehicle ~= nil then
+							local vehpos = GetEntityCoords(vehicle)
+							if #(pos - vector3(vehpos.x, vehpos.y, vehpos.z)) < 2.5 and not isBusy then
+								DrawText3Ds(vehpos.x, vehpos.y, vehpos.z, Lang:t('text.disassemble_vehicle'))
+								if IsControlJustReleased(0, 38) then
+									if GetPedInVehicleSeat(vehicle, -1) == PlayerPedId() then
+										if IsVehicleValid(GetEntityModel(vehicle)) then
+											local vehiclePlate = QBCore.Functions.GetPlate(vehicle)
+											QBCore.Functions.TriggerCallback('qb-scrapyard:checkOwnerVehicle',function(retval)
+												if retval then
+													ScrapVehicle(vehicle)
+												else
+													QBCore.Functions.Notify(Lang:t('error.smash_own'), "error")
+												end
+											end,vehiclePlate)
+										else
+											QBCore.Functions.Notify(Lang:t('error.cannot_scrap'), "error")
+										end
 									else
-										QBCore.Functions.Notify(Lang:t('error.cannot_scrap'), "error")
+										QBCore.Functions.Notify(Lang:t('error.not_driver'), "error")
 									end
-								else
-									QBCore.Functions.Notify(Lang:t('error.not_driver'), "error")
 								end
 							end
 						end
 					end
 				end
-			end
-			if #(pos - vector3(Config.Locations[closestScrapyard]["list"].x, Config.Locations[closestScrapyard]["list"].y, Config.Locations[closestScrapyard]["list"].z)) < 1.5 then
-				if not IsPedInAnyVehicle(PlayerPedId()) and not emailSend then
-					DrawText3Ds(Config.Locations[closestScrapyard]["list"].x, Config.Locations[closestScrapyard]["list"].y, Config.Locations[closestScrapyard]["list"].z, Lang:t('text.email_list'))
-					if IsControlJustReleased(0, 38) then
-						CreateListEmail()
+				if #(pos - vector3(Config.Locations[closestScrapyard]["list"].x, Config.Locations[closestScrapyard]["list"].y, Config.Locations[closestScrapyard]["list"].z)) < 1.5 then
+					if not IsPedInAnyVehicle(PlayerPedId()) and not emailSend then
+						DrawText3Ds(Config.Locations[closestScrapyard]["list"].x, Config.Locations[closestScrapyard]["list"].y, Config.Locations[closestScrapyard]["list"].z, Lang:t('text.email_list'))
+						if IsControlJustReleased(0, 38) then
+							CreateListEmail()
+						end
 					end
+				end
+			else
+				if #(pos - vector3(Config.Locations[closestScrapyard]["deliver"].x, Config.Locations[closestScrapyard]["deliver"].y, Config.Locations[closestScrapyard]["deliver"].z)) < 10.0 then
+					local disassemblevehicle = QBCore.Functions.GetClosestVehicle()
+					local vehiclePlate = QBCore.Functions.GetPlate(disassemblevehicle)
+					exports['qb-target']:AddTargetEntity(disassemblevehicle, {
+						options = {
+							{
+								type = "client",
+								icon = "fas fa-wrench",
+								action = function()
+									QBCore.Functions.TriggerCallback('qb-scrapyard:checkOwnerVehicle',function(retval)
+										if retval then
+											ScrapVehicle(disassemblevehicle)
+										else
+											QBCore.Functions.Notify(Lang:t('error.smash_own'), "error")
+										end
+									end,vehiclePlate)
+								end,
+								canInteract = function()
+									if not IsVehicleValid(GetEntityModel(disassemblevehicle)) then return false end
+									return true
+								end,
+								label = Lang:t("text.disassemble_vehicle_target"),
+							},
+						},
+						distance = 3.0
+					})
+				end
+				if #(pos - vector3(Config.Locations[closestScrapyard]["list"].x, Config.Locations[closestScrapyard]["list"].y, Config.Locations[closestScrapyard]["list"].z)) < 40.5 then
+					if not DoesEntityExist(pedlist) then
+						local model = `a_m_m_hillbilly_01`
+						RequestModel(model)
+						while not HasModelLoaded(model) do
+							Wait(0)
+						end
+						pedlist = CreatePed(4, model, Config.Locations[closestScrapyard]["list"].x, Config.Locations[closestScrapyard]["list"].y, Config.Locations[closestScrapyard]["list"].z - 1, 0.0, true, true)
+						exports['qb-target']:AddTargetEntity(pedlist, {
+							options = {
+								{
+									type = "client",
+									icon = "fas fa-list",
+									action = function()
+										CreateListEmail()
+									end,
+									canInteract = function()
+										if emailSend then return false end
+										return true
+									end,
+									label = Lang:t("text.email_list_target"),
+								},
+							},
+							distance = 3.0
+						})
+					end
+				elseif DoesEntityExist(pedlist) then
+					DeleteEntity(pedlist)
 				end
 			end
 		end

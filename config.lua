@@ -1,5 +1,7 @@
 Config = {}
 
+Config.UseTarget = GetConvar('UseTarget', 'false') == 'true' -- Use qb-target interactions (don't change this, go to your server.cfg and add `setr UseTarget true` to use this and just that from true to false or the other way around)
+
 Config.Locations = {
     [1] = {
         ["main"] = vector3(2397.42, 3089.44, 49.92),
@@ -61,4 +63,15 @@ Config.Vehicles = {
     [38] = "jester",
     [39] = "rhapsody",
     [40] = "feltzer2",
+    [41] = "buffalo",
+    [42] = "buffalo2",
+    [43] = "stretch",
+    [44] = "ratloader2",
+    [45] = "ruiner",
+    [46] = "rebel",
+    [48] = "slamvan",
+    [58] = "zion",
+    [59] = "zion2",
+    [60] = "tampa",
+    [61] = "sultan",
 }
