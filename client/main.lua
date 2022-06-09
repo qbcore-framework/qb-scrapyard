@@ -2,6 +2,7 @@ local QBCore = exports['qb-core']:GetCoreObject()
 local closestScrapyard = 0
 local emailSend = false
 local isBusy = false
+local pedlist
 
 RegisterNetEvent("QBCore:Client:OnPlayerLoaded", function()
     TriggerServerEvent("qb-scrapyard:server:LoadVehicleList")
@@ -104,7 +105,8 @@ CreateThread(function()
 						while not HasModelLoaded(model) do
 							Wait(0)
 						end
-						pedlist = CreatePed(4, model, Config.Locations[closestScrapyard]["list"].x, Config.Locations[closestScrapyard]["list"].y, Config.Locations[closestScrapyard]["list"].z - 1, 0.0, true, true)
+						pedlist = CreatePed(4, model, Config.Locations[closestScrapyard]["list"].x, Config.Locations[closestScrapyard]["list"].y, Config.Locations[closestScrapyard]["list"].z - 1, 250.0, true, true)
+						FreezeEntityPosition(pedlist, true)
 						exports['qb-target']:AddTargetEntity(pedlist, {
 							options = {
 								{
