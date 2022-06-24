@@ -29,14 +29,14 @@ end)
 
 CreateThread(function()
 	while true do
-		Wait(1)
+		Wait(500)
 		if closestScrapyard ~= 0 then
 			local pos = GetEntityCoords(PlayerPedId())
 			if not Config.UseTarget then
 				if #(pos - vector3(Config.Locations[closestScrapyard]["deliver"].x, Config.Locations[closestScrapyard]["deliver"].y, Config.Locations[closestScrapyard]["deliver"].z)) < 10.0 then
 					if IsPedInAnyVehicle(PlayerPedId()) then
 						local vehicle = GetVehiclePedIsIn(PlayerPedId(), true)
-						if vehicle ~= 0 and vehicle ~= nil then
+						if vehicle ~= 0 and vehicle then
 							local vehpos = GetEntityCoords(vehicle)
 							if #(pos - vector3(vehpos.x, vehpos.y, vehpos.z)) < 2.5 and not isBusy then
 								DrawText3Ds(vehpos.x, vehpos.y, vehpos.z, Lang:t('text.disassemble_vehicle'))
@@ -71,39 +71,46 @@ CreateThread(function()
 					end
 				end
 			else
-				if #(pos - vector3(Config.Locations[closestScrapyard]["deliver"].x, Config.Locations[closestScrapyard]["deliver"].y, Config.Locations[closestScrapyard]["deliver"].z)) < 10.0 then
-					local disassemblevehicle = QBCore.Functions.GetClosestVehicle()
-					local vehiclePlate = QBCore.Functions.GetPlate(disassemblevehicle)
-					exports['qb-target']:AddTargetEntity(disassemblevehicle, {
-						options = {
-							{
-								type = "client",
-								icon = "fas fa-wrench",
-								action = function()
-									QBCore.Functions.TriggerCallback('qb-scrapyard:checkOwnerVehicle',function(retval)
-										if retval then
-											ScrapVehicle(disassemblevehicle)
-										else
-											QBCore.Functions.Notify(Lang:t('error.smash_own'), "error")
-										end
-									end,vehiclePlate)
-								end,
-								canInteract = function()
-									if not IsVehicleValid(GetEntityModel(disassemblevehicle)) then return false end
-									return true
-								end,
-								label = Lang:t("text.disassemble_vehicle_target"),
+				local disassemblevehicletarget = false
+				local disassemblevehicle = QBCore.Functions.GetClosestVehicle()
+				if #(pos - vector3(Config.Locations[closestScrapyard]["deliver"].x, Config.Locations[closestScrapyard]["deliver"].y, Config.Locations[closestScrapyard]["deliver"].z)) < 10 then
+					if not disassemblevehicletarget then
+						local vehiclePlate = QBCore.Functions.GetPlate(disassemblevehicle)
+						exports['qb-target']:AddTargetEntity(disassemblevehicle, {
+							options = {
+								{
+									type = "client",
+									icon = "fas fa-wrench",
+									label = Lang:t("text.disassemble_vehicle_target"),
+									action = function()
+										QBCore.Functions.TriggerCallback('qb-scrapyard:checkOwnerVehicle',function(retval)
+											if retval then
+												ScrapVehicle(disassemblevehicle)
+											else
+												QBCore.Functions.Notify(Lang:t('error.smash_own'), "error")
+											end
+										end, vehiclePlate)
+									end,
+									canInteract = function()
+										if not IsVehicleValid(GetEntityModel(disassemblevehicle)) then return false end
+										return true
+									end,
+								},
 							},
-						},
-						distance = 3.0
-					})
+							distance = 3.0
+						})
+						disassemblevehicletarget = true
+					end
+				else
+					exports['qb-target']:RemoveTargetEntity(disassemblevehicle, Lang:t("text.disassemble_vehicle_target"))
+					disassemblevehicletarget = false
 				end
-				if #(pos - vector3(Config.Locations[closestScrapyard]["list"].x, Config.Locations[closestScrapyard]["list"].y, Config.Locations[closestScrapyard]["list"].z)) < 40.5 then
+				if #(pos - vector3(Config.Locations[closestScrapyard]["list"].x, Config.Locations[closestScrapyard]["list"].y, Config.Locations[closestScrapyard]["list"].z)) < 65 then
 					if not DoesEntityExist(pedlist) then
 						local model = `a_m_m_hillbilly_01`
 						RequestModel(model)
 						while not HasModelLoaded(model) do
-							Wait(0)
+							Wait(10)
 						end
 						pedlist = CreatePed(4, model, Config.Locations[closestScrapyard]["list"].x, Config.Locations[closestScrapyard]["list"].y, Config.Locations[closestScrapyard]["list"].z - 1, 250.0, true, true)
 						FreezeEntityPosition(pedlist, true)
@@ -112,6 +119,7 @@ CreateThread(function()
 								{
 									type = "client",
 									icon = "fas fa-list",
+									label = Lang:t("text.email_list_target"),
 									action = function()
 										CreateListEmail()
 									end,
@@ -119,7 +127,6 @@ CreateThread(function()
 										if emailSend then return false end
 										return true
 									end,
-									label = Lang:t("text.email_list_target"),
 								},
 							},
 							distance = 3.0
@@ -127,6 +134,8 @@ CreateThread(function()
 					end
 				elseif DoesEntityExist(pedlist) then
 					DeleteEntity(pedlist)
+				else
+					Wait(1000)
 				end
 			end
 		end
@@ -138,7 +147,7 @@ RegisterNetEvent('qb-scapyard:client:setNewVehicles', function(vehicleList)
 end)
 
 function CreateListEmail()
-	if Config.CurrentVehicles ~= nil and next(Config.CurrentVehicles) ~= nil then
+	if Config.CurrentVehicles and next(Config.CurrentVehicles) then
 		emailSend = true
 		local vehicleList = ""
 		for k, v in pairs(Config.CurrentVehicles) do
