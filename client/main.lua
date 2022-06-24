@@ -3,6 +3,7 @@ local closestScrapyard = 0
 local emailSend = false
 local isBusy = false
 local pedlist
+local disassemblevehicletarget = false
 
 RegisterNetEvent("QBCore:Client:OnPlayerLoaded", function()
     TriggerServerEvent("qb-scrapyard:server:LoadVehicleList")
@@ -71,7 +72,6 @@ CreateThread(function()
 					end
 				end
 			else
-				local disassemblevehicletarget = false
 				local disassemblevehicle = QBCore.Functions.GetClosestVehicle()
 				if #(pos - vector3(Config.Locations[closestScrapyard]["deliver"].x, Config.Locations[closestScrapyard]["deliver"].y, Config.Locations[closestScrapyard]["deliver"].z)) < 10 then
 					if not disassemblevehicletarget then
@@ -187,6 +187,7 @@ function ScrapVehicle(vehicle)
 		SetEntityAsMissionEntity(vehicle, true, true)
 		DeleteVehicle(vehicle)
 		isBusy = false
+		disassemblevehicletarget = false
 	end, function() -- Cancel
 		StopAnimTask(PlayerPedId(), "mp_car_bomb", "car_bomb_mechanic", 1.0)
 		isBusy = false
