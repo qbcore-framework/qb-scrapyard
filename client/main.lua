@@ -151,9 +151,9 @@ function CreateListEmail()
 		emailSend = true
 		local vehicleList = ""
 		for k, v in pairs(Config.CurrentVehicles) do
-			if Config.CurrentVehicles[k] ~= nil then
+			if Config.CurrentVehicles[k] then
 				local vehicleInfo = QBCore.Shared.Vehicles[v]
-				if vehicleInfo ~= nil then
+				if vehicleInfo then
 					vehicleList = vehicleList  .. vehicleInfo["brand"] .. " " .. vehicleInfo["name"] .. "<br />"
 				end
 			end
@@ -197,9 +197,9 @@ end
 
 function IsVehicleValid(vehicleModel)
 	local retval = false
-	if Config.CurrentVehicles ~= nil and next(Config.CurrentVehicles) ~= nil then
+	if Config.CurrentVehicles and next(Config.CurrentVehicles) then
 		for k in pairs(Config.CurrentVehicles) do
-			if Config.CurrentVehicles[k] ~= nil and GetHashKey(Config.CurrentVehicles[k]) == vehicleModel then
+			if Config.CurrentVehicles[k] and GetHashKey(Config.CurrentVehicles[k]) == vehicleModel then
 				retval = true
 			end
 		end
@@ -209,7 +209,7 @@ end
 
 function GetVehicleKey(vehicleModel)
 	local retval = 0
-	if Config.CurrentVehicles ~= nil and next(Config.CurrentVehicles) ~= nil then
+	if Config.CurrentVehicles and next(Config.CurrentVehicles) then
 		for k in pairs(Config.CurrentVehicles) do
 			if GetHashKey(Config.CurrentVehicles[k]) == vehicleModel then
 				retval = k
@@ -224,7 +224,7 @@ function SetClosestScrapyard()
     local current = nil
     local dist = nil
 	for id in pairs(Config.Locations) do
-		if current ~= nil then
+		if current then
 			if #(pos - vector3(Config.Locations[id]["main"].x, Config.Locations[id]["main"].y, Config.Locations[id]["main"].z)) < dist then
 				current = id
 				dist = #(pos - vector3(Config.Locations[id]["main"].x, Config.Locations[id]["main"].y, Config.Locations[id]["main"].z))
