@@ -9,7 +9,9 @@ local Translations = {
     text = {
         scrapyard = 'Scrap Yard',
         disassemble_vehicle = '~g~E~w~ - Disassemble Vehicle',
+        disassemble_vehicle_target = 'Disassemble Vehicle',
         email_list = "~g~E~w~ - E-mail Vehicle List",
+        email_list_target = "E-mail Vehicle List",
         demolish_vehicle = "Demolish Vehicle",
     },
     email = {
