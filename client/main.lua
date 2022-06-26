@@ -3,7 +3,7 @@ local closestScrapyard = 0
 local emailSend = false
 local isBusy = false
 local pedlist
-local disassemblevehicletarget = false
+local disassemblevehicletarget = {}
 
 RegisterNetEvent("QBCore:Client:OnPlayerLoaded", function()
     TriggerServerEvent("qb-scrapyard:server:LoadVehicleList")
@@ -74,7 +74,7 @@ CreateThread(function()
 			else
 				local disassemblevehicle = QBCore.Functions.GetClosestVehicle()
 				if #(pos - vector3(Config.Locations[closestScrapyard]["deliver"].x, Config.Locations[closestScrapyard]["deliver"].y, Config.Locations[closestScrapyard]["deliver"].z)) < 10 then
-					if not disassemblevehicletarget then
+					if not disassemblevehicletarget[disassemblevehicle] then
 						local vehiclePlate = QBCore.Functions.GetPlate(disassemblevehicle)
 						exports['qb-target']:AddTargetEntity(disassemblevehicle, {
 							options = {
@@ -99,11 +99,13 @@ CreateThread(function()
 							},
 							distance = 3.0
 						})
-						disassemblevehicletarget = true
+						disassemblevehicletarget[disassemblevehicle] = true
 					end
 				else
-					exports['qb-target']:RemoveTargetEntity(disassemblevehicle, Lang:t("text.disassemble_vehicle_target"))
-					disassemblevehicletarget = false
+					if disassemblevehicletarget[disassemblevehicle] then
+						exports['qb-target']:RemoveTargetEntity(disassemblevehicle, Lang:t("text.disassemble_vehicle_target"))
+						disassemblevehicletarget[disassemblevehicle] = nil
+					end
 				end
 				if #(pos - vector3(Config.Locations[closestScrapyard]["list"].x, Config.Locations[closestScrapyard]["list"].y, Config.Locations[closestScrapyard]["list"].z)) < 65 then
 					if not DoesEntityExist(pedlist) then
@@ -187,7 +189,9 @@ function ScrapVehicle(vehicle)
 		SetEntityAsMissionEntity(vehicle, true, true)
 		DeleteVehicle(vehicle)
 		isBusy = false
-		disassemblevehicletarget = false
+		if disassemblevehicletarget[vehicle] then
+			disassemblevehicletarget[vehicle] = nil
+		end
 	end, function() -- Cancel
 		StopAnimTask(PlayerPedId(), "mp_car_bomb", "car_bomb_mechanic", 1.0)
 		isBusy = false
