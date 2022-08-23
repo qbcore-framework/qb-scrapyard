@@ -9,14 +9,14 @@ end)
 CreateThread(function()
 	for id in pairs(Config.Locations) do
 		local blip = AddBlipForCoord(Config.Locations[id]["main"].x, Config.Locations[id]["main"].y, Config.Locations[id]["main"].z)
-        SetBlipSprite(blip, 380)
-        SetBlipDisplay(blip, 4)
-        SetBlipScale(blip, 0.7)
-        SetBlipAsShortRange(blip, true)
-        SetBlipColour(blip, 9)
-        BeginTextCommandSetBlipName("STRING")
-        AddTextComponentSubstringPlayerName(Lang:t('text.scrapyard'))
-        EndTextCommandSetBlipName(blip)
+		SetBlipSprite(blip, 380)
+		SetBlipDisplay(blip, 4)
+		SetBlipScale(blip, 0.7)
+		SetBlipAsShortRange(blip, true)
+		SetBlipColour(blip, 9)
+		BeginTextCommandSetBlipName("STRING")
+		AddTextComponentSubstringPlayerName(Lang:t('text.scrapyard'))
+		EndTextCommandSetBlipName(blip)
 	end
 end)
 
@@ -42,6 +42,7 @@ local listen = false
 end
 
 CreateThread(function()
+	local scrapPoly = {}
 	for i = 1,#Config.Locations,1 do
 		for k,v in pairs(Config.Locations[i]) do
 			if k ~= 'main' then
@@ -86,7 +87,6 @@ CreateThread(function()
 						})
 					end
 				else
-        			local scrapPoly = {}
 					scrapPoly[#scrapPoly+1] = BoxZone:Create(vector3(v.coords.x, v.coords.y, v.coords.z), v.length, v.width, {
 						heading = v.heading,
 						name = k..i,
@@ -154,7 +154,7 @@ function ScrapVehicle()
 				if IsVehicleValid(GetEntityModel(vehicle)) then
 					local vehiclePlate = QBCore.Functions.GetPlate(vehicle)
 					QBCore.Functions.TriggerCallback('qb-scrapyard:checkOwnerVehicle',function(retval)
-						if retval then		
+						if retval then
 							isBusy = true
 							local scrapTime = math.random(28000, 37000)
 							ScrapVehicleAnim(scrapTime)
