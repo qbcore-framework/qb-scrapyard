@@ -1,5 +1,4 @@
 local QBCore = exports['qb-core']:GetCoreObject()
-local closestScrapyard = 0
 local emailSend = false
 local isBusy = false
 
@@ -28,12 +27,14 @@ local listen = false
         while listen do
             if IsControlPressed(0, 38) then
                 exports['qb-core']:KeyPressed()
-				if type == 'deliver' then
-					ScrapVehicle()
-				else
+			if type == 'deliver' then
+				ScrapVehicle()
+			else
+				if not IsPedInAnyVehicle(PlayerPedId()) and not emailSend then
 					CreateListEmail()
 				end
-				break
+			end
+			break
             end
             Wait(0)
         end
@@ -73,7 +74,9 @@ CreateThread(function()
 							options = {
 								{
 									action = function()
-										CreateListEmail()
+										if not IsPedInAnyVehicle(PlayerPedId()) and not emailSend then
+											CreateListEmail()
+										end
 									end,
 									icon = "fa fa-envelop",
 									label = Lang:t('text.email_list'),
