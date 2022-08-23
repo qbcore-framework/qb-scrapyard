@@ -8,8 +8,8 @@ local Translations = {
     },
     text = {
         scrapyard = 'Hurda Alanı',
-        disassemble_vehicle = '~g~E~w~ - Aracı Sök',
-        email_list = "~g~E~w~ - Araç Listesi Gönder",
+        disassemble_vehicle = '[E] - Aracı Sök',
+        email_list = "[E] - Araç Listesi Gönder",
         demolish_vehicle = "Aracı Parçala",
     },
     email = {
