@@ -16,8 +16,8 @@ local Translations = {
     },
     email = {
         sender = "Turner’s Araç Parçalama",
-		subject = "Araç Listesi",
-		message = "Sadece Birkaç Aracı Parçalayabilirsiniz.<br />Beni Rahatsız Etmediğin sürece Parçaladığın Her Şeyi Kendin Alabilirsin.<br /><br /><strong>Araç Listesi:</strong><br />",
+        subject = "Araç Listesi",
+        message = "Sadece Birkaç Aracı Parçalayabilirsiniz.<br />Beni Rahatsız Etmediğin sürece Parçaladığın Her Şeyi Kendin Alabilirsin.<br /><br /><strong>Araç Listesi:</strong><br />",
     },
 }
 

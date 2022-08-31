@@ -16,8 +16,8 @@ local Translations = {
     },
     email = {
         sender = "Turner’s Auto Wrecking",
-		subject = "Liste des véhicules",
-		message = "Vous ne pouvez détruire qu'un certain nombre de véhicules.<br />Vous pouvez garder tout ce que vous détruisez pour vous-même tant que vous ne m'emerdez pas.<br /><br /><strong>Liste des véhicules:</strong><br />",
+        subject = "Liste des véhicules",
+        message = "Vous ne pouvez détruire qu'un certain nombre de véhicules.<br />Vous pouvez garder tout ce que vous détruisez pour vous-même tant que vous ne m'emerdez pas.<br /><br /><strong>Liste des véhicules:</strong><br />",
     },
 }
 

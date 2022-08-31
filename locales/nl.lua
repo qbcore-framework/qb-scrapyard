@@ -16,8 +16,8 @@ local Translations = {
     },
     email = {
         sender = "Turner’s Autosloop",
-		subject = "Voertuiglijst",
-		message = "Je kunt slechts een aantal voertuigen slopen.<br />Je kunt alles wat je sloopt voor jezelf houden zolang je mij er niet mee lastig valt.<br /><br /><strong>Voertuiglijst:</strong><br />",
+        subject = "Voertuiglijst",
+        message = "Je kunt slechts een aantal voertuigen slopen.<br />Je kunt alles wat je sloopt voor jezelf houden zolang je mij er niet mee lastig valt.<br /><br /><strong>Voertuiglijst:</strong><br />",
     },
 }
 
