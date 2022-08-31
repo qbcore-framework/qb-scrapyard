@@ -60,7 +60,7 @@ CreateThread(function()
                                             ScrapVehicle()
                                         end,
                                         icon = "fa fa-wrench",
-                                        label = Lang:t('text.disassemble_vehicle'),
+                                        label = Lang:t('text.disassemble_vehicle_target'),
                                     }
                                 },
                             distance = 3
@@ -80,7 +80,7 @@ CreateThread(function()
                                         end
                                     end,
                                     icon = "fa fa-envelop",
-                                    label = Lang:t('text.email_list'),
+                                    label = Lang:t('text.email_list_target'),
                                 }
                             },
                             distance = 1.5

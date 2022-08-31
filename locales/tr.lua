@@ -9,7 +9,9 @@ local Translations = {
     text = {
         scrapyard = 'Hurda Alanı',
         disassemble_vehicle = '[E] - Aracı Sök',
+        disassemble_vehicle_target = 'Aracı Sök',
         email_list = "[E] - Araç Listesi Gönder",
+        email_list_target = "Araç Listesi Gönder",
         demolish_vehicle = "Aracı Parçala",
     },
     email = {
