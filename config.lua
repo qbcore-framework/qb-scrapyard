@@ -20,6 +20,7 @@ Config.Items = {
     "glass",
 }
 
+Config.VehicleCount = 40
 Config.CurrentVehicles = {}
 
 Config.Vehicles = {
