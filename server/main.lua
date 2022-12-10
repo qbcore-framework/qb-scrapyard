@@ -49,7 +49,7 @@ end)
 
 function GenerateVehicleList()
     Config.CurrentVehicles = {}
-    for i = 1, 40, 1 do
+    for i = 1, Config.VehicleCount, 1 do
         local randVehicle = Config.Vehicles[math.random(1, #Config.Vehicles)]
         if not IsInList(randVehicle) then
             Config.CurrentVehicles[i] = randVehicle
