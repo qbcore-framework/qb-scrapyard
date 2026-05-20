@@ -3,7 +3,7 @@ game 'gta5'
 lua54 'yes'
 author 'Kakarot'
 description 'Allows players to scrap cars for money'
-version '1.2.0'
+version '1.5.0'
 
 shared_script {
     '@PolyZone/client.lua',

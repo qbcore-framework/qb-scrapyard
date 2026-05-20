@@ -1,4 +1,5 @@
-local QBCore = exports['qb-core']:GetCoreObject()
+local QBCore = exports['qb-core']:GetCoreObject({ 'Functions' })
+local sharedItems = exports['qb-core']:GetShared('Items')
 
 CreateThread(function()
     while true do
@@ -26,12 +27,11 @@ end)
 
 RegisterNetEvent('qb-scrapyard:server:ScrapVehicle', function(listKey)
     local src = source
-    local Player = QBCore.Functions.GetPlayer(src)
     if Config.CurrentVehicles[listKey] ~= nil then
         for _ = 1, math.random(2, 4), 1 do
             local item = Config.Items[math.random(1, #Config.Items)]
             exports['qb-inventory']:AddItem(src, item, math.random(25, 45), false, false, 'qb-scrapyard:server:ScrapVehicle')
-            TriggerClientEvent('qb-inventory:client:ItemBox', src, QBCore.Shared.Items[item], 'add')
+            TriggerClientEvent('qb-inventory:client:ItemBox', src, sharedItems[item], 'add')
             Wait(500)
         end
         local Luck = math.random(1, 8)
@@ -39,7 +39,7 @@ RegisterNetEvent('qb-scrapyard:server:ScrapVehicle', function(listKey)
         if Luck == Odd then
             local random = math.random(10, 20)
             exports['qb-inventory']:AddItem(src, 'rubber', random, false, false, 'qb-scrapyard:server:ScrapVehicle')
-            TriggerClientEvent('qb-inventory:client:ItemBox', src, QBCore.Shared.Items['rubber'], 'add')
+            TriggerClientEvent('qb-inventory:client:ItemBox', src, sharedItems['rubber'], 'add')
         end
         Config.CurrentVehicles[listKey] = nil
         TriggerClientEvent('qb-scapyard:client:setNewVehicles', -1, Config.CurrentVehicles)
